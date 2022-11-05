@@ -6,19 +6,27 @@
     [string]$To,
 
     [Parameter(Mandatory=$false)]
-    [switch]$Silent
+    [switch]$Silent,
+    
+    [ValidateRange(4,5)]
+    [Parameter(Mandatory=$false)]
+    [int]$Dict = 4
 )
 $From = $From.ToLower()
 $To   = $To.ToLower()
+if ( $From.Length -ne $To.Length -or $From.Length -lt 4 -or $From.Length -gt 5) {
+    Write-Error "From and To need to be either 4 or 5 characters long words, and both need to be the same length.@
+    return
+}
 # Load Wordlists
 Set-Location -LiteralPath $PSScriptRoot
-$in    = Get-Content "english-4letters.txt"
+$in    = Get-Content "english-$($Dict)letters.txt"
 $count = $in.Count
 $pos = @{}
 for ($i = 0; $i -lt $count; $i++) {
     $pos[$in[$i]] = $i
 }
-$neighbours = Get-Content "neighbours4.json" | ConvertFrom-Json
+$neighbours = Get-Content "neighbours$Dict.json" | ConvertFrom-Json
 $fromIndex  = $pos[$From]
 $toIndex    = $pos[$To]
 
