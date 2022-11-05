@@ -1,4 +1,8 @@
-$dict = 5
+param(
+    [ValidateRange(4, 5)]
+    [Parameter(Position = 0, Mandatory = true)]
+    [int]$Dict
+)
 Set-Location -LiteralPath $PSScriptRoot
 $in = Get-Content ('english-{0}letters.txt' -f $dict)
 $count = $in.Count
